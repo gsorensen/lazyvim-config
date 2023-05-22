@@ -10,6 +10,7 @@ map("v", "jk", "<Esc>", {})
 map("x", "jk", "<Esc>", {})
 map("n", "<leader>w", "<cmd>:w!<cr>", { desc = "Save file" })
 map("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Rename symbol " })
+map("n", "gl", vim.diagnostic.open_float, { desc = "Show diagnostics " })
 
 -- Telescope
 map("n", "<leader>fw", require("telescope.builtin").live_grep, { desc = "Telescope Live grep" })

@@ -95,6 +95,7 @@ return {
           require("lspconfig").clangd.setup({ server = opts })
         end,
       },
+      autoformat = false,
     },
   },
 
