@@ -18,3 +18,6 @@ map("n", "<leader>fo", require("telescope.builtin").oldfiles, { desc = "Telescop
 
 -- Clang
 map("n", "<leader>s", "<cmd>ClangdSwitchSourceHeader<cr>", opts)
+
+-- Git blame
+map("n", "<leader>ap", "<cmd>GitBlameToggle<cr>", opts)
