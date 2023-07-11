@@ -89,14 +89,48 @@ return {
         pyright = {},
         clangd = {},
         rust_analyzer = {},
+        ltex = {},
       },
       setup = {
         clangd = function(_, opts)
           require("lspconfig").clangd.setup({ server = opts })
         end,
+        --ltex = function(_, _)
+        --  require("lspconfig").ltex.setup({
+        --    filetypes = { "tex", "vimwiki", "markdown", "md", "pandoc", "vimwiki.markdown.pandoc" },
+        --    flags = { debounce_text_changes = 300 },
+        --    settings = {
+        --      ltex = {
+        --        language = "en-GB",
+        --        disabledRules = { "OXFORD_SPELLING_Z_NOT_S" },
+        --      },
+        --    },
+        --    --            on_attach = on_attach,
+        --  })
+        --end,
       },
       autoformat = true,
     },
+  },
+  {
+    "barreiroleo/ltex_extra.nvim",
+    dependencies = "neovim/nvim-lspconfig",
+    ltex_extra_ops = {},
+    config = function(ltex_extra_ops)
+      require("ltex_extra").setup({
+        ltex_extra_ops,
+        server_opts = {
+          filetypes = { "tex", "vimwiki", "markdown", "md", "pandoc", "vimwiki.markdown.pandoc" },
+          flags = { debounce_text_changes = 300 },
+          settings = {
+            ltex = {
+              language = "en-GB",
+              disabledRules = { ["en-GB"] = { "OXFORD_SPELLING_Z_NOT_S" } },
+            },
+          },
+        },
+      })
+    end,
   },
 
   -- add tsserver and setup with typescript.nvim instead of lspconfig
@@ -213,6 +247,8 @@ return {
         "shfmt",
         "flake8",
         "clangd",
+        "vale",
+        "latexindent",
       },
     },
   },
@@ -274,4 +310,28 @@ return {
       })
     end,
   },
+  {
+    "ray-x/go.nvim",
+    dependencies = { -- optional packages
+      "ray-x/guihua.lua",
+      "neovim/nvim-lspconfig",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("go").setup()
+    end,
+    event = { "CmdlineEnter" },
+    ft = { "go", "gomod" },
+    build = ':lua require("go.install").update_all_sync()', -- if you need to install/update all binaries
+  },
+  {
+    "akinsho/flutter-tools.nvim",
+    lazy = false,
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "stevearc/dressing.nvim", -- optional for vim.ui.select
+    },
+    config = true,
+  },
+  { "lervag/vimtex" },
 }

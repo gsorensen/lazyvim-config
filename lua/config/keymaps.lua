@@ -21,3 +21,7 @@ map("n", "<leader>s", "<cmd>ClangdSwitchSourceHeader<cr>", opts)
 
 -- Git blame
 map("n", "<leader>ap", "<cmd>GitBlameToggle<cr>", opts)
+
+-- Vimtex
+map("n", "<leader>vb", "<cmd>VimtexCompile<cr>", { desc = "Build LaTex source" })
+map("n", "<leader>vv", "<cmd>VimtexView<cr>", { desc = "View LaTex in source" })
