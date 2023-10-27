@@ -7,3 +7,6 @@ vim.o.softtabstop = 4 -- Number of spaces inserted instead of a TAB character
 vim.o.shiftwidth = 4 -- Number of spaces inserted when indenting
 --vim.o.wrap = true
 vim.o.textwidth = 80
+--vim.cmd("set colorcolumn=120")
+vim.lsp.set_log_level("off")
+vim.diagnostic.config({ virtual_text = true })
