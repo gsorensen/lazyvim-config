@@ -24,6 +24,9 @@ vim.g["vimtex_log_ignore"] = {
 
 vim.g["vimtex_context_pdf_viewer"] = "skim"
 
+-- This is technically not Vimtex specific, but where I use it
+vim.opt.spellfile = vim.fn.stdpath("config") .. "/spell/en-gb.utf-8.add"
+
 -- vim.g['vimtex_complete_enabled'] = 1
 -- vim.g['vimtex_compiler_progname'] = 'nvr'
 -- vim.g['vimtex_complete_close_braces'] = 1
