@@ -50,39 +50,39 @@ return {
   --},
 
   -- change some telescope options and a keymap to browse plugin files
-  {
-    "nvim-telescope/telescope.nvim",
-    keys = {
-      -- add a keymap to browse plugin files
-      -- stylua: ignore
-      {
-        "<leader>fp",
-        function() require("telescope.builtin").find_files({ cwd = require("lazy.core.config").options.root }) end,
-        desc = "Find Plugin File",
-      },
-    },
-    -- change some options
-    opts = {
-      defaults = {
-        layout_strategy = "horizontal",
-        --layout_config = { prompt_position = "top" },
-        sorting_strategy = "ascending",
-        winblend = 0,
-      },
-    },
-  },
+  --{
+  --  "nvim-telescope/telescope.nvim",
+  --  keys = {
+  --    -- add a keymap to browse plugin files
+  --    -- stylua: ignore
+  --    {
+  --      "<leader>fp",
+  --      function() require("telescope.builtin").find_files({ cwd = require("lazy.core.config").options.root }) end,
+  --      desc = "Find Plugin File",
+  --    },
+  --  },
+  --  -- change some options
+  --  opts = {
+  --    defaults = {
+  --      layout_strategy = "horizontal",
+  --      --layout_config = { prompt_position = "top" },
+  --      sorting_strategy = "ascending",
+  --      winblend = 0,
+  --    },
+  --  },
+  --},
 
   -- add telescope-fzf-native
-  {
-    "telescope.nvim",
-    dependencies = {
-      "nvim-telescope/telescope-fzf-native.nvim",
-      build = "make",
-      config = function()
-        require("telescope").load_extension("fzf")
-      end,
-    },
-  },
+  -- {
+  --   "telescope.nvim",
+  --   dependencies = {
+  --     "nvim-telescope/telescope-fzf-native.nvim",
+  --     build = "make",
+  --     config = function()
+  --       require("telescope").load_extension("fzf")
+  --     end,
+  --   },
+  -- },
 
   -- add pyright to lspconfig
   {
@@ -91,11 +91,12 @@ return {
     opts = {
       ---@type lspconfig.options
       servers = {
-        pyright,
-        clangd,
-        rust_analyzer,
-        ltex,
-        matlab_ls,
+        clangd = {
+          mason = false,
+        },
+        vtsls = {
+          mason = false,
+        },
       },
       setup = {
         clangd = function(_, opts)
@@ -117,47 +118,47 @@ return {
       },
     },
   },
-  {
-    "barreiroleo/ltex_extra.nvim",
-    dependencies = "neovim/nvim-lspconfig",
-    ltex_extra_ops = {},
-    config = function(ltex_extra_ops)
-      require("ltex_extra").setup({
-        ltex_extra_ops,
-        server_opts = {
-          filetypes = { "tex", "vimwiki", "markdown", "md", "pandoc", "vimwiki.markdown.pandoc" },
-          flags = { debounce_text_changes = 300 },
-          settings = {
-            ltex = {
-              language = "en-GB",
-              disabledRules = { ["en-GB"] = { "OXFORD_SPELLING_Z_NOT_S", "BACHELOR_ABBR" } },
-            },
-          },
-        },
-      })
-    end,
-  },
+  -- {
+  --   "barreiroleo/ltex_extra.nvim",
+  --   dependencies = "neovim/nvim-lspconfig",
+  --   ltex_extra_ops = {},
+  --   config = function(ltex_extra_ops)
+  --     require("ltex_extra").setup({
+  --       ltex_extra_ops,
+  --       server_opts = {
+  --         filetypes = { "tex", "vimwiki", "markdown", "md", "pandoc", "vimwiki.markdown.pandoc" },
+  --         flags = { debounce_text_changes = 300 },
+  --         settings = {
+  --           ltex = {
+  --             language = "en-GB",
+  --             disabledRules = { ["en-GB"] = { "OXFORD_SPELLING_Z_NOT_S", "BACHELOR_ABBR" } },
+  --           },
+  --         },
+  --       },
+  --     })
+  --   end,
+  -- },
 
-  -- add tsserver and setup with typescript.nvim instead of lspconfig
-  {
-    "neovim/nvim-lspconfig",
-    dependencies = {
-      "jose-elias-alvarez/typescript.nvim",
-      init = function()
-        require("lazyvim.util").lsp.on_attach(function(_, buffer)
-          -- stylua: ignore
-          vim.keymap.set( "n", "<leader>co", "TypescriptOrganizeImports", { buffer = buffer, desc = "Organize Imports" })
-          vim.keymap.set("n", "<leader>cR", "TypescriptRenameFile", { desc = "Rename File", buffer = buffer })
-        end)
-      end,
-    },
-    ---@class PluginLspOpts
-    opts = {},
-  },
+  -- -- add tsserver and setup with typescript.nvim instead of lspconfig
+  -- {
+  --   "neovim/nvim-lspconfig",
+  --   dependencies = {
+  --     "jose-elias-alvarez/typescript.nvim",
+  --     init = function()
+  --       require("lazyvim.util").lsp.on_attach(function(_, buffer)
+  --         -- stylua: ignore
+  --         vim.keymap.set( "n", "<leader>co", "TypescriptOrganizeImports", { buffer = buffer, desc = "Organize Imports" })
+  --         vim.keymap.set("n", "<leader>cR", "TypescriptRenameFile", { desc = "Rename File", buffer = buffer })
+  --       end)
+  --     end,
+  --   },
+  --   ---@class PluginLspOpts
+  --   opts = {},
+  -- },
 
   -- for typescript, LazyVim also includes extra specs to properly setup lspconfig,
   -- treesitter, mason and typescript.nvim. So instead of the above, you can use:
-  { import = "lazyvim.plugins.extras.lang.typescript" },
+  -- { import = "lazyvim.plugins.extras.lang.typescript" },
 
   -- add more treesitter parsers
   {
@@ -173,11 +174,9 @@ return {
         "lua",
         "markdown",
         "markdown_inline",
-        "python",
+        -- "python",
         "query",
         "rust",
-        "tsx",
-        "typescript",
         "vim",
         "yaml",
       },
@@ -222,7 +221,7 @@ return {
   -- { import = "lazyvim.plugins.extras.ui.mini-starter" },
 
   -- add jsonls and schemastore ans setup treesitter for json, json5 and jsonc
-  { import = "lazyvim.plugins.extras.lang.json" },
+  -- { import = "lazyvim.plugins.extras.lang.json" },
 
   -- add any tools you want to have installed below
   {
@@ -233,8 +232,6 @@ return {
         "shellcheck",
         "shfmt",
         "flake8",
-        "clangd",
-        "vale",
         "latexindent",
       },
     },
@@ -255,48 +252,128 @@ return {
     end,
   },
   -- then: setup supertab in cmp
+  --{
+  --  "hrsh7th/nvim-cmp",
+  --  dependencies = {
+  --    "hrsh7th/cmp-emoji",
+  --    "neovim/nvim-lspconfig",
+  --  },
+  --  ---@param opts cmp.ConfigSchema
+  --  opts = function(_, opts)
+  --    local has_words_before = function()
+  --      unpack = unpack or table.unpack
+  --      local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  --      return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+  --    end
+
+  --    local luasnip = require("luasnip")
+  --    local cmp = require("cmp")
+
+  --    opts.mapping = vim.tbl_extend("force", opts.mapping, {
+  --      ["<Tab>"] = cmp.mapping(function(fallback)
+  --        if cmp.visible() then
+  --          cmp.select_next_item()
+  --          -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
+  --          -- they way you will only jump inside the snippet region
+  --        elseif luasnip.expand_or_jumpable() then
+  --          luasnip.expand_or_jump()
+  --        elseif has_words_before() then
+  --          cmp.complete()
+  --        else
+  --          fallback()
+  --        end
+  --      end, { "i", "s" }),
+  --      ["<S-Tab>"] = cmp.mapping(function(fallback)
+  --        if cmp.visible() then
+  --          cmp.select_prev_item()
+  --        elseif luasnip.jumpable(-1) then
+  --          luasnip.jump(-1)
+  --        else
+  --          fallback()
+  --        end
+  --      end, { "i", "s" }),
+  --    })
+  --  end,
+  --},
+  ----  { "jamestthompson3/nvim-remote-containers" },
+  -- {
+  --   "benlubas/molten-nvim",
+  --   version = "^1.0.0", -- use version <2.0.0 to avoid breaking changes
+  --   dependencies = { "3rd/image.nvim" },
+  --   build = ":UpdateRemotePlugins",
+  --   init = function()
+  --     -- these are examples, not defaults. Please see the readme
+  --     vim.g.molten_image_provider = "image.nvim"
+  --     vim.g.molten_output_win_max_height = 20
+  --   end,
+  -- },
+  -- {
+  --   -- see the image.nvim readme for more information about configuring this plugin
+  --   "3rd/image.nvim",
+  --   opts = {
+  --     backend = "kitty", -- whatever backend you would like to use
+  --     max_width = 100,
+  --     max_height = 12,
+  --     max_height_window_percentage = math.huge,
+  --     max_width_window_percentage = math.huge,
+  --     window_overlap_clear_enabled = true, -- toggles images when windows are overlapped
+  --     window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
+  --   },
+  -- },
   {
-    "hrsh7th/nvim-cmp",
-    dependencies = {
-      "hrsh7th/cmp-emoji",
+    "numToStr/Comment.nvim",
+    opts = {
+      -- add any options here
     },
-    ---@param opts cmp.ConfigSchema
-    opts = function(_, opts)
-      local has_words_before = function()
-        unpack = unpack or table.unpack
-        local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-        return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-      end
-
-      local luasnip = require("luasnip")
-      local cmp = require("cmp")
-
-      opts.mapping = vim.tbl_extend("force", opts.mapping, {
-        ["<Tab>"] = cmp.mapping(function(fallback)
-          if cmp.visible() then
-            cmp.select_next_item()
-            -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
-            -- they way you will only jump inside the snippet region
-          elseif luasnip.expand_or_jumpable() then
-            luasnip.expand_or_jump()
-          elseif has_words_before() then
-            cmp.complete()
-          else
-            fallback()
-          end
-        end, { "i", "s" }),
-        ["<S-Tab>"] = cmp.mapping(function(fallback)
-          if cmp.visible() then
-            cmp.select_prev_item()
-          elseif luasnip.jumpable(-1) then
-            luasnip.jump(-1)
-          else
-            fallback()
-          end
-        end, { "i", "s" }),
-      })
-    end,
+    setup = { ---Add a space b/w comment and the line
+      padding = true,
+      ---Whether the cursor should stay at its position
+      sticky = true,
+      ---Lines to be ignored while (un)comment
+      ignore = nil,
+      ---LHS of toggle mappings in NORMAL mode
+      toggler = {
+        ---Line-comment toggle keymap
+        line = "acc",
+        ---Block-comment toggle keymap
+        block = "abc",
+      },
+      ---LHS of operator-pending mappings in NORMAL and VISUAL mode
+      opleader = {
+        ---Line-comment keymap
+        line = "ac",
+        ---Block-comment keymap
+        block = "ab",
+      },
+      ---LHS of extra mappings
+      extra = {
+        ---Add comment on the line above
+        above = "acO",
+        ---Add comment on the line below
+        below = "aco",
+        ---Add comment at the end of line
+        eol = "acA",
+      },
+      ---Enable keybindings
+      ---NOTE: If given `false` then the plugin won't create any mappings
+      mappings = {
+        ---Operator-pending mapping; `gcc` `gbc` `gc[count]{motion}` `gb[count]{motion}`
+        basic = true,
+        ---Extra mapping; `gco`, `gcO`, `gcA`
+        extra = true,
+      },
+      ---Function to call before (un)comment
+      pre_hook = nil,
+      ---Function to call after (un)comment
+      post_hook = nil,
+    },
   },
-  { "lervag/vimtex" },
-  { "jamestthompson3/nvim-remote-containers" },
+  --{
+  --  rocks = {
+  --    hererocks = true, -- recommended if you do not have global installation of Lua 5.1.
+  --  },
+  --},
+  --{
+  --  "mfussenegger/nvim-dap-python",
+  --},
 }
